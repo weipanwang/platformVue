@@ -31,30 +31,33 @@
       >
         1.密码的长度必须在6-15位之间;2.密码支持英文字母大写、小写、数字、特殊字符'@'、'#'、'+'、'.'、'_'
       </div>
-      <!-- 内容主体区 -->
+      <!-- 老密码校验 -->
       <el-form
         :model="checkPassword"
         :rules="cheeckPasswordFormRules"
         ref="checkPasswordFormRef"
+        class="inputWidth oldPassBox"
       >
         <el-form-item prop="password">
           <el-input
             placeholder="请输入旧密码"
             v-model="checkPassword.password"
             show-password
-            class="inputWidth oldPassBox"
+            class="inputWidth"
           ></el-input>
         </el-form-item>
       </el-form>
+      <!-- 新密码输入 -->
       <el-form
         :model="UpdatePassword"
         :rules="updataPasswordFormRules"
         ref="updataPasswordFormRef"
+        class="inputWidth newPassBox"
       >
         <el-form-item prop="newword">
           <el-input
             placeholder="请输入新密码"
-            class="inputWidth newPassBox"
+            class="inputWidth"
             v-model="UpdatePassword.newword"
             show-password
           ></el-input>
@@ -62,7 +65,7 @@
         <el-form-item prop="newword1">
           <el-input
             placeholder="请再次输入新密码"
-            class="inputWidth newPassBox"
+            class="inputWidth"
             v-model="UpdatePassword.newword1"
             show-password
           ></el-input>
@@ -70,12 +73,19 @@
       </el-form>
       <!-- 确认提交 -->
       <el-button
-        style="display: block; margin: 0 auto; margin-top: 60px"
+        style="
+          display: block;
+          margin: 0 auto;
+          margin-top: 60px;
+          margin-bottom: 100px;
+        "
         type="primary"
+        class="newPassBox"
         @click="passwordInfo"
         >{{ anniu }}</el-button
       >
-      <!-- 底部区 -->
+      <!-- 修改成功 -->
+      <div class="successBox">修改成功</div>
     </el-card>
   </div>
 </template>
@@ -100,16 +110,28 @@ export default {
         password: [
           { required: true, message: '请输入旧密码', trigger: 'blur' },
           { min: 6, max: 15, message: '请输入6~15位的密码', trigger: 'blur' },
+          {
+            pattern: /^[A-Za-z0-9@#+_.]+$/,
+            message: '含有非法字符',
+          },
         ],
       },
       updataPasswordFormRules: {
         newword: [
           { required: true, message: '请输入新密码', trigger: 'blur' },
           { min: 6, max: 15, message: '请输入6~15位的密码', trigger: 'blur' },
+          {
+            pattern: /^[A-Za-z0-9@#+_.]+$/,
+            message: '含有非法字符',
+          },
         ],
         newword1: [
           { required: true, message: '请输入新密码', trigger: 'blur' },
           { min: 6, max: 15, message: '请输入6~15位的密码', trigger: 'blur' },
+          {
+            pattern: /^[A-Za-z0-9@#+_.]+$/,
+            message: '含有非法字符',
+          },
         ],
       },
     }
@@ -141,7 +163,15 @@ export default {
             '/user/updatepassword',
             qs.stringify(this.UpdatePassword)
           )
-          console.log(res)
+          //console.log(res)
+          if (res.status === 200) {
+            this.$message.success('修改成功')
+            $('.newPassBox').hide()
+            $('.successBox').show()
+            this.number = 3
+          } else if (res.status === 400) {
+            this.$message.error(res.msg)
+          }
         })
       }
     },
@@ -161,5 +191,19 @@ export default {
 }
 .newPassBox {
   display: none;
+}
+.successBox {
+  display: none;
+  margin-top: 100px;
+  margin-bottom: 200px;
+  text-align: center;
+  color: rgba(30, 235, 166, 0.808);
+  font-size: 30px;
+  img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    background-color: #eee;
+  }
 }
 </style>
