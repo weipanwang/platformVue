@@ -47,6 +47,7 @@ module.exports = {
     "open": true,
     proxy: {
       '/api': {
+        //target: 'http://script888.cn:8080/manager-web',
         target: 'http://localhost:8080/',
         changeOrigin: true, //是否跨域
         pathRewrite: {
@@ -61,9 +62,9 @@ module.exports = {
         }
       }
     },
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
+    //headers: {
+      //'Access-Control-Allow-Origin': '*',
+    //},
     hotOnly: false,
     disableHostCheck: true
   },

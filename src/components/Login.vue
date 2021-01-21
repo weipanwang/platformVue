@@ -96,8 +96,6 @@ export default {
             '&captcha=' +
             this.loginForm.captcha
         )
-        // const { data: res } = await this.$http.post('/user/login', formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: '*/*' } })
-        // console.log(res)
         if (res.status !== 200) this.getVerification()
         if (res.status !== 200) return this.$message.error(res.msg)
         this.$message.success('登录成功')
